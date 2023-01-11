@@ -1,10 +1,8 @@
 from tkinter import *
 from tkinter import filedialog
 from os.path import expanduser
-
-
-from pygame import mixer
 from PlayButton import PlayButton
+from pydub import AudioSegment
 
 
 def create_root_window():
@@ -18,23 +16,21 @@ def create_root_window():
     root.geometry("%dx%d+%d+%d" % (window_width, window_height, x_coord, y_coord))
     root.title("Sonic Surge")
 
-    sound = "coin.mp3"
-    play_btn = PlayButton(sound, root, text="Play mp3", command=mixer.Sound(sound).play)
-    choose_btn = Button(root, text="Choose mp3", command=lambda: choose_new_play_btn_sound(play_btn))
+    audio_seg = AudioSegment.from_file("coin.mp3")
+
+    play_btn = PlayButton(audio_seg, root, text="Play mp3")
+    choose_btn = Button(root, text="Choose mp3", command=lambda: change_play_btn_sound(play_btn))
     play_btn.place(x=11, y=160)
     choose_btn.place(x=171, y=160)
 
 
-def choose_new_play_btn_sound(play_btn):
-    play_btn.sound = get_mp3_file_path_by_opening_finder_at_music_folder()
-
-
-def get_mp3_file_path_by_opening_finder_at_music_folder():
-    return filedialog.askopenfilename(initialdir=expanduser("~/Music/"), filetypes=[("MP3 files", "*.mp3")])
+def change_play_btn_sound(play_btn):
+    file_path = filedialog.askopenfilename(initialdir=expanduser("~/Music/"), filetypes=[("MP3 files", "*.mp3")])
+    if file_path != '':
+        play_btn.change_wave_obj_using_audio_seg(AudioSegment.from_file(file_path))
 
 
 def main():
-    mixer.init()
     create_root_window()
     mainloop()
 
