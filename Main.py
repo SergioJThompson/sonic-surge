@@ -16,7 +16,7 @@ def create_root_window():
     root.geometry("%dx%d+%d+%d" % (window_width, window_height, x_coord, y_coord))
     root.title("Sonic Surge")
 
-    audio_seg = AudioSegment.from_file("coin.mp3")
+    audio_seg = AudioSegment.from_file("coin.mp3")  # TODO: make button make no noise by default
 
     play_btn = PlayButton(audio_seg, root, text="Play mp3")
     choose_btn = Button(root, text="Choose mp3", command=lambda: change_play_btn_sound(play_btn))
@@ -36,3 +36,5 @@ def main():
 
 
 main()
+
+# TODO: backwards audio button!
