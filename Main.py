@@ -21,7 +21,7 @@ def create_root_window():
     root.geometry("%dx%d+%d+%d" % (window_width, window_height, x_coord, y_coord))
     root.title("Sonic Surge")
 
-    play_btn = Playbutton(root, text="Play mp3")  # TODO: say "No file loaded" if button is clicked without file loaded
+    play_btn = Playbutton(root, text="Play mp3")
     choose_btn = Button(root, text="Choose mp3", command=lambda: change_audio_file(play_btn, file_label))
     # TODO: pause button
     play_btn.grid(column=0, row=1)
