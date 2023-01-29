@@ -9,9 +9,17 @@ class MsgLibrary:
         return "Choose mp3"
 
     @staticmethod
-    def file_loaded_lbl():
+    def no_file_loaded_txt():
         return "No file loaded."
 
     @staticmethod
     def file_loaded_msg_first_part():
         return "File loaded: "
+
+    @staticmethod
+    def stop_btn_txt():
+        return "Stop"
+
+    @staticmethod
+    def reverse_btn_txt():
+        return "Reverse file"
