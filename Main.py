@@ -9,10 +9,10 @@ from MsgLibrary import MsgLibrary
 from TextFitter import TextFitter
 
 
-def create_root_window():
+def create_root_window_and_widgets():
     root = Tk()
     window_width = 302
-    window_height = 50
+    window_height = 80
     root.minsize(window_width, window_height)
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
@@ -25,20 +25,17 @@ def create_root_window():
 
     play_btn = Playbutton(root, text=msgs.play_button_txt())
     choose_btn = Button(root, text=msgs.choose_button_txt(), command=lambda: change_file(play_btn, file_loaded_lbl))
+    stop_btn = Button(root, text=msgs.stop_btn_txt(), command=lambda: play_btn.stop())
 
-    file_loaded_lbl = Label(root, text="No file loaded.", justify=CENTER)
-    invis_lbl1 = Label(root)
-    invis_lbl2 = Label(root, width=10)
+    file_loaded_lbl = Label(root, text=msgs.no_file_loaded_txt(), justify=CENTER)
 
     file_loaded_lbl.grid(column=0, row=0, columnspan=3)
-    invis_lbl1.grid(column=0, row=1, columnspan=3)
-
+    choose_btn.grid(column=1, row=1)
     play_btn.grid(column=0, row=2)
-    invis_lbl2.grid(column=1, row=2)
-    choose_btn.grid(column=2, row=2)
+    stop_btn.grid(column=2, row=2)
 
-    root.grid_columnconfigure(1, weight=1)
-    root.grid_rowconfigure(1, weight=1)
+    root.grid_columnconfigure(2, weight=1)
+    root.grid_rowconfigure(2, weight=1)
 
     # TODO: make label text change responsively when window size increased/decreased
 
@@ -74,7 +71,7 @@ def get_wave_object(audio_file_path):
 
 
 def main():
-    create_root_window()
+    create_root_window_and_widgets()
     mainloop()
 
 
