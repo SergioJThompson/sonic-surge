@@ -1,6 +1,13 @@
 class WidgetDict:
-    widgets = {}
+    _instance = None
 
-    @classmethod
-    def add(cls, name, button):
-        cls.widgets[name] = button
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
+    def __init__(self):
+        self.widgets = {}
+
+    def add(self, name, button):
+        self.widgets[name] = button
