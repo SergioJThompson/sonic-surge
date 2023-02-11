@@ -16,8 +16,14 @@ class SoundPlayer:
             self.play_obj = self.sound.wave_obj.play()
 
     def stop_if_playing(self):
-        if self.sound and self.play_obj and self.play_obj.is_playing():
+        if self.is_playing():
             self.play_obj.stop()
+
+    def is_playing(self):
+        return self.sound and self.play_obj and self.play_obj.is_playing()
+
+    def stop(self):
+        self.play_obj.stop()
 
     # TODO: Fix bug: 'Sound' object has no attribute 'play_obj' when you click Play
     # TODO: Implement pausing using other library

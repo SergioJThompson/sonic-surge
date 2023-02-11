@@ -1,4 +1,7 @@
-# TODO: Fix labels not updating when you load a file, etc. Implement unit tests for this.
+# TODO: Implement unit tests for labels.
+# TODO: Implement unit tests for playback and reverse playback.
+# TODO: Move actions from main to Operator.py
+# TODO: Make enums for sounds e.g. ORIGINAL, REVERSED
 
 from tkinter import *
 from tkinter import filedialog
@@ -19,7 +22,7 @@ from WidgetNames import WidgetNames
 
 def create_root_window():
     root = Tk()
-    window_width = 244
+    window_width = 300
     window_height = 123
     root.minsize(window_width, window_height)
     screen_width = root.winfo_screenwidth()
@@ -34,15 +37,15 @@ def create_root_window():
 def fill_widget_dict(window, player, sound_dict):
     sounds = sound_dict.sounds
 
-    lbl_file_loaded = Label(window, text=Msgs.no_file_loaded_txt(), justify=CENTER, font='helvetica 14 bold')
+    lbl_file_loaded = Label(window, text=Msgs.no_file_loaded(), justify=CENTER, font='helvetica 14 bold')
     lbl_action = Label(window, justify=CENTER, font='helvetica 14')
     btn_play = Button(window, text=Msgs.play_button_txt(), font='helvetica 14', width=5,
-               command=lambda: try_to_play(player, lbl_action))
+               command=lambda: try_to_play_and_update_lbl(player, lbl_action))
     btn_choose = Button(window, text=Msgs.choose_button_txt(), font='helvetica 14', width=7,
                command=lambda: stop_playback_and_load_file_and_update_labels(sound_dict, player,
                lbl_file_loaded, lbl_action))
     btn_stop = Button(window, text=Msgs.stop_btn_txt(), font='helvetica 14', width=5,
-               command=lambda: player.stop_if_playing())
+               command=lambda: stop_playback_and_update_label(player, lbl_action))
     btn_reverse = Button(window, text=Msgs.reverse_btn_txt(), font='helvetica 14', width=7,
                command=lambda: stop_playback_reverse_file_and_update_label
                (sounds, player, lbl_action))
@@ -62,11 +65,10 @@ def fill_widget_dict(window, player, sound_dict):
 def root_widgets_to_grid(widgets):
     widgets[WidgetNames.LBL_FILE_LOADED]    .grid(row=0, column=0, columnspan=3)
     widgets[WidgetNames.LBL_ACTION]         .grid(row=1, column=0, columnspan=3, pady=8)
-    widgets[WidgetNames.BTN_CHOOSE]         .grid(row=2, column=1)
+    widgets[WidgetNames.BTN_CHOOSE]         .grid(row=2, column=1, padx=28)
     widgets[WidgetNames.BTN_PLAY]           .grid(row=3, column=0)
     widgets[WidgetNames.BTN_REVERSE]        .grid(row=3, column=1)
     widgets[WidgetNames.BTN_STOP]           .grid(row=3, column=2)
-    # TODO: Bring everything into vertical alignment. It's askew right now
 
 
 def root_grid_config(root):
@@ -74,11 +76,13 @@ def root_grid_config(root):
     root.grid_rowconfigure(2, weight=1)
 
 
-def try_to_play(player, lbl):
+def try_to_play_and_update_lbl(player, lbl):
     if player.sound:
         player.play()
+        lbl.config(text=Msgs.playing())
     else:
-        lbl.config(text="Nothing to play. Load a file!")
+        lbl.config(text=Msgs.no_file_to_play())
+    # TODO: Say "Finished playing" when file finishes playing
 
 
 def stop_playback_and_load_file_and_update_labels(sound_dict, player, loaded_lbl, reversed_file_lbl):
@@ -87,6 +91,7 @@ def stop_playback_and_load_file_and_update_labels(sound_dict, player, loaded_lbl
     path = get_file_path_from_user()
     if path:  # If user didn't click cancel
         sound = SoundBuilder.build_sound_from_path(path)
+        sound_dict.clear()
         sound_dict.add("original", sound)
         player.sound = sound
 
@@ -102,6 +107,9 @@ def get_file_path_from_user():
 
 def seg_to_wave_obj(seg: AudioSegment):
     return WaveObject(seg.raw_data, seg.channels, seg.sample_width, seg.frame_rate)
+
+# TODO: Fix bug where sometimes, when you load a second file, the reverse button does nothing
+#  and other times it plays the reverse file that was previously generated (for the first file)
 
 
 def stop_playback_reverse_file_and_update_label(sounds, player, reversed_lbl):
@@ -121,6 +129,14 @@ def stop_playback_reverse_file_and_update_label(sounds, player, reversed_lbl):
         reversed_lbl.config(text="Reversed file!")
     else:
         reversed_lbl.config(text="No file to reverse!")
+
+
+def stop_playback_and_update_label(player, lbl):
+    if player.is_playing():
+        player.stop()
+        lbl.config(text=Msgs.stopped_playback())
+    else:
+        lbl.config(text=Msgs.no_playback_to_stop())
 
 
 def main():

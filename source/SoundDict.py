@@ -13,3 +13,6 @@ class SoundDict:
 
     def add(self, name, sound):
         self.sounds[name] = sound
+
+    def clear(self):
+        self.sounds = {}
