@@ -19,29 +19,29 @@ class MyTestCase(unittest.TestCase):
 
     def test_sound_plays(self):
         player = SoundPlayer()
-        play_file(player, "/Users/sergiojthompson/Documents/programs/sonic surge/test_files/Bob Marley - Is This Love.mp3")
+        play_file(player, "/Users/sergiojthompson/Documents/programs/sonic-surge/test_files/Bob Marley - Is This Love.mp3")
         self.assertTrue(player.play_obj.is_playing())
 
     def test_long_sound_plays(self):
         player = SoundPlayer()
-        play_file(player, "/Users/sergiojthompson/Documents/programs/sonic surge/test_files/Nina Simone - Sinnerman.mp3")
+        play_file(player, "/Users/sergiojthompson/Documents/programs/sonic-surge/test_files/Nina Simone - Sinnerman.mp3")
         self.assertTrue(player.play_obj.is_playing())
 
     def test_short_sound_plays(self):
         player = SoundPlayer()
-        play_file(player, "/Users/sergiojthompson/Documents/programs/sonic surge/test_files/Mario coin.mp3")
+        play_file(player, "/Users/sergiojthompson/Documents/programs/sonic-surge/test_files/Mario coin.mp3")
         self.assertTrue(player.play_obj.is_playing())
 
     def test_playback_stops(self):
         player = SoundPlayer()
-        play_file(player, "/Users/sergiojthompson/Documents/programs/sonic surge/test_files/Bob Marley - Is This Love.mp3")
+        play_file(player, "/Users/sergiojthompson/Documents/programs/sonic-surge/test_files/Bob Marley - Is This Love.mp3")
         player.stop_if_playing()
         time.sleep(0.2)     # Stopping playback takes a moment, it seems, so we wait.
         self.assertFalse(player.play_obj.is_playing())
 
     def test_play_stop_play_again(self):
         player = SoundPlayer()
-        play_file(player, "/Users/sergiojthompson/Documents/programs/sonic surge/test_files/Bob Marley - Is This Love.mp3")
+        play_file(player, "/Users/sergiojthompson/Documents/programs/sonic-surge/test_files/Bob Marley - Is This Love.mp3")
         player.stop_if_playing()
         time.sleep(0.2)
         player.play()
@@ -49,9 +49,9 @@ class MyTestCase(unittest.TestCase):
 
     def test_no_overlapping_playbacks(self):
         player = SoundPlayer()
-        play_file(player, "/Users/sergiojthompson/Documents/programs/sonic surge/test_files/Bob Marley - Is This Love.mp3")
+        play_file(player, "/Users/sergiojthompson/Documents/programs/sonic-surge/test_files/Bob Marley - Is This Love.mp3")
         first_playback = player.play_obj
-        play_file(player, "/Users/sergiojthompson/Documents/programs/sonic surge/test_files/Joy Division - Disorder.mp3")
+        play_file(player, "/Users/sergiojthompson/Documents/programs/sonic-surge/test_files/Joy Division - Disorder.mp3")
         time.sleep(0.2)
         self.assertFalse(first_playback.is_playing())
 
