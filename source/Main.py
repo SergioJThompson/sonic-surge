@@ -1,6 +1,5 @@
 # TODO: Implement unit tests for labels.
 # TODO: Implement unit tests for playback and reverse playback.
-# TODO: Make enums for sounds e.g. ORIGINAL, REVERSED
 
 from tkinter import *
 
@@ -26,9 +25,7 @@ def create_root_window():
     return root
 
 
-def fill_widget_dict(window, player, sound_dict):
-    sounds = sound_dict.sounds
-
+def write_widget_dict(window, player, sound_dict):
     lbl_file_loaded = Label(window, text=Msgs.no_file_loaded(), justify=CENTER, font='helvetica 14 bold')
     lbl_action = Label(window, justify=CENTER, font='helvetica 14')
     btn_play = Button(window, text=Msgs.play_button_txt(), font='helvetica 14', width=5,
@@ -40,7 +37,7 @@ def fill_widget_dict(window, player, sound_dict):
                command=lambda: Operator.stop_playback_and_update_label(player, lbl_action))
     btn_reverse = Button(window, text=Msgs.reverse_btn_txt(), font='helvetica 14', width=7,
                command=lambda: Operator.stop_playback_and_reverse_file_and_update_label
-               (sounds, player, lbl_action))
+               (sound_dict, player, lbl_action))
 
     widget_pairs = {
         WidgetNames.LBL_FILE_LOADED: lbl_file_loaded,
@@ -68,16 +65,12 @@ def root_grid_config(root):
     root.grid_rowconfigure(2, weight=1)
 
 
-# TODO: Fix bug where sometimes, when you load a second file, the reverse button does nothing
-#  and other times it plays the reverse file that was previously generated (for the first file)
-
-
 def main():
     root = create_root_window()
     player = SoundPlayer()
     s_dict = SoundDict()
     w_dict = WidgetDict()
-    w_dict.widgets = fill_widget_dict(root, player, s_dict)
+    w_dict.widgets = write_widget_dict(root, player, s_dict)
     root_widgets_to_grid(w_dict.widgets)
 
     mainloop()

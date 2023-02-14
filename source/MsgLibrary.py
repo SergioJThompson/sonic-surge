@@ -39,4 +39,3 @@ class MsgLibrary:
     @staticmethod
     def stopped_playback():
         return "Stopped playback."
-

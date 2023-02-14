@@ -11,8 +11,8 @@ class SoundDict:
     def __init__(self):
         self.sounds = {}
 
-    def add(self, name, sound):
-        self.sounds[name] = sound
+    def add(self, i, sound):
+        self.sounds[i] = sound
 
     def clear(self):
         self.sounds = {}

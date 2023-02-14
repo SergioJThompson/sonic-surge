@@ -1,5 +1,6 @@
 import math
 from tkinter import font
+from tkinter.font import Font
 
 from MsgLibrary import MsgLibrary
 
@@ -13,7 +14,7 @@ class TextEditor:
     @staticmethod
     def write_file_loaded_msg(file_name, lbl):
         txt = MsgLibrary.file_loaded_msg_first_part() + file_name
-        txt_font = font.nametofont(lbl.cget("font"))
+        txt_font = Font(font=lbl.cget("font"))
         window_width = lbl.master.winfo_width()
         txt = TextEditor.truncate_as_far_as_necessary_or_possible_to_fit_in_window(txt, txt_font, window_width)
         return txt

@@ -9,5 +9,5 @@ class WidgetDict:
     def __init__(self):
         self.widgets = {}
 
-    def add(self, name, button):
-        self.widgets[name] = button
+    def add(self, i, button):
+        self.widgets[i] = button
