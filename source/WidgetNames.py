@@ -9,3 +9,4 @@ class WidgetNames(Enum):
     BTN_STOP        = 5
     BTN_REVERSE     = 6
     BTN_PAUSE       = 7
+    BTN_FRAMES      = 8

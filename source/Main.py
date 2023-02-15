@@ -38,8 +38,11 @@ def write_widget_dict(window, player, sound_dict):
     btn_reverse = Button(window, text=Msgs.reverse_btn_txt(), font='helvetica 14', width=7,
                command=lambda: Operator.stop_playback_and_reverse_file_and_update_label
                (sound_dict, player, lbl_action))
-    btn_pause = Button(window, text=Msgs.pause_btn_txt())
-    # TODO: Make pause button same length as others in column
+    btn_pause = Button(window, text=Msgs.pause_btn_txt(), font='helvetica 14', width=7)
+    btn_lower_frames = Button(window, text=Msgs.lower_frames(), font='helvetica 14', width=5,
+                command=lambda: Operator.stop_playback_and_lower_frames_and_update_label
+                (sound_dict, player, lbl_action))
+    # TODO: Undo all changes button
     widget_pairs = {
         WidgetNames.LBL_FILE_LOADED: lbl_file_loaded,
         WidgetNames.LBL_ACTION: lbl_action,
@@ -47,7 +50,8 @@ def write_widget_dict(window, player, sound_dict):
         WidgetNames.BTN_CHOOSE: btn_choose,
         WidgetNames.BTN_STOP: btn_stop,
         WidgetNames.BTN_REVERSE: btn_reverse,
-        WidgetNames.BTN_PAUSE: btn_pause
+        WidgetNames.BTN_PAUSE: btn_pause,
+        WidgetNames.BTN_FRAMES: btn_lower_frames
     }
 
     return widget_pairs
@@ -61,6 +65,7 @@ def root_widgets_to_grid(widgets):
     widgets[WidgetNames.BTN_STOP]           .grid(row=3, column=2)
     widgets[WidgetNames.BTN_PAUSE]          .grid(row=3, column=1)
     widgets[WidgetNames.BTN_REVERSE]        .grid(row=4, column=1)
+    widgets[WidgetNames.BTN_FRAMES]         .grid(row=4, column=2)
 
 
 def root_grid_config(root):

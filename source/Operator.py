@@ -29,24 +29,47 @@ class Operator:
             reversed_file_lbl.config(text="File loaded!")
 
     @staticmethod
-    def stop_playback_and_reverse_file_and_update_label(sound_dict, player, reversed_lbl):
+    def stop_playback_and_lower_frames_and_update_label(sound_dict, player, action_lbl):
+        player.stop_if_playing()
+        sounds = sound_dict.sounds
+        if SoundNames.FRAMES_LOWERED in sounds:
+            if player.sound == sounds[SoundNames.FRAMES_LOWERED]:
+                player.sound = sounds[SoundNames.ORIGINAL]
+                action_lbl.config(text="Raised frames back to normal!")
+            elif player.sound == sounds[SoundNames.ORIGINAL]:
+                player.sound = sounds[SoundNames.FRAMES_LOWERED]
+                action_lbl.config(text="Lowered frames!")
+        elif player.sound:
+            seg = AudioSegment.from_file(player.sound.path)
+            lowered_seg = seg.set_frame_rate(int (seg.frame_rate / 4))
+            # TODO: Get the lowest sample rate that'll work and use that.
+            lowered_sound = SoundBuilder.build_sound_from_audio_seg(lowered_seg)
+            sound_dict.add(SoundNames.FRAMES_LOWERED, lowered_seg)
+            player.sound = lowered_sound
+            action_lbl.config(text="Lowered frames!")
+        else:
+            action_lbl.config(text="No file to modify!")
+
+    @staticmethod
+    def stop_playback_and_reverse_file_and_update_label(sound_dict, player, action_lbl):
         player.stop_if_playing()
         sounds = sound_dict.sounds
         if SoundNames.REVERSED in sounds:
-            if player.sound == sound_dict[SoundNames.REVERSED]:
-                player.sound = sound_dict[SoundNames.ORIGINAL]
-                reversed_lbl.config(text="Unreversed file!")
-            elif player.sound == sound_dict[SoundNames.ORIGINAL]:
-                player.sound = sound_dict[SoundNames.REVERSED]
-                reversed_lbl.config(text="Reversed file!")
+            if player.sound == sounds[SoundNames.REVERSED]:
+                player.sound = sounds[SoundNames.ORIGINAL]
+                action_lbl.config(text="Unreversed file!")
+            elif player.sound == sounds[SoundNames.ORIGINAL]:
+                player.sound = sounds[SoundNames.REVERSED]
+                action_lbl.config(text="Reversed file!")
         elif player.sound:
             reversed_seg = AudioSegment.from_file(player.sound.path).reverse()
+            # TODO Make it work if the file doesn't have a path
             reversed_sound = SoundBuilder.build_sound_from_audio_seg(reversed_seg)
             sound_dict.add(SoundNames.REVERSED, reversed_sound)
             player.sound = reversed_sound
-            reversed_lbl.config(text="Reversed file!")
+            action_lbl.config(text="Reversed file!")
         else:
-            reversed_lbl.config(text="No file to reverse!")
+            action_lbl.config(text="No file to reverse!")
 
     @staticmethod
     def stop_playback_and_update_label(player, lbl):
