@@ -21,7 +21,11 @@ class MsgLibrary:
         return "No playback to stop!"
 
     @staticmethod
-    def play_button_txt():
+    def pause_btn_txt():
+        return "Pause"
+
+    @staticmethod
+    def play_btn_txt():
         return "Play mp3"
 
     @staticmethod
