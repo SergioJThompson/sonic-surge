@@ -35,18 +35,19 @@ class Operator:
         if SoundNames.FRAMES_LOWERED in sounds:
             if player.sound == sounds[SoundNames.FRAMES_LOWERED]:
                 player.sound = sounds[SoundNames.ORIGINAL]
-                action_lbl.config(text="Raised frames back to normal!")
+                action_lbl.config(text="Raised sample rate back to normal!")
             elif player.sound == sounds[SoundNames.ORIGINAL]:
                 player.sound = sounds[SoundNames.FRAMES_LOWERED]
-                action_lbl.config(text="Lowered frames!")
+                action_lbl.config(text="Lowered sample rate!")
         elif player.sound:
             seg = AudioSegment.from_file(player.sound.path)
             lowered_seg = seg.set_frame_rate(int (seg.frame_rate / 4))
             # TODO: Get the lowest sample rate that'll work and use that.
             lowered_sound = SoundBuilder.build_sound_from_audio_seg(lowered_seg)
+            lowered_sound.path = player.sound.path
             sound_dict.add(SoundNames.FRAMES_LOWERED, lowered_seg)
             player.sound = lowered_sound
-            action_lbl.config(text="Lowered frames!")
+            action_lbl.config(text="Lowered sample rate!")
         else:
             action_lbl.config(text="No file to modify!")
 
@@ -63,7 +64,6 @@ class Operator:
                 action_lbl.config(text="Reversed file!")
         elif player.sound:
             reversed_seg = AudioSegment.from_file(player.sound.path).reverse()
-            # TODO Make it work if the file doesn't have a path
             reversed_sound = SoundBuilder.build_sound_from_audio_seg(reversed_seg)
             sound_dict.add(SoundNames.REVERSED, reversed_sound)
             player.sound = reversed_sound

@@ -9,8 +9,8 @@ class MsgLibrary:
         return "File loaded: "
 
     @staticmethod
-    def lower_frames():
-        return "Lower framerate"
+    def lower_sample_rate():
+        return "Lower sample rate"
 
     @staticmethod
     def no_file_loaded():

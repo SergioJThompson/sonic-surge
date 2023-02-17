@@ -1,3 +1,4 @@
+# TODO: Make it so a file can have multiple attributes [e.g. reversed AND frames lowered]
 # TODO: Implement unit tests for labels.
 # TODO: Implement unit tests for playback and reverse playback.
 
@@ -39,8 +40,8 @@ def write_widget_dict(window, player, sound_dict):
                command=lambda: Operator.stop_playback_and_reverse_file_and_update_label
                (sound_dict, player, lbl_action))
     btn_pause = Button(window, text=Msgs.pause_btn_txt(), font='helvetica 14', width=7)
-    btn_lower_frames = Button(window, text=Msgs.lower_frames(), font='helvetica 14', width=5,
-                command=lambda: Operator.stop_playback_and_lower_frames_and_update_label
+    btn_lower_frames = Button(window, text=Msgs.lower_sample_rate(), font='helvetica 14', width=5,
+                              command=lambda: Operator.stop_playback_and_lower_frames_and_update_label
                 (sound_dict, player, lbl_action))
     # TODO: Undo all changes button
     widget_pairs = {
