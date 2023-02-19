@@ -2,6 +2,7 @@ from pydub import AudioSegment
 from simpleaudio import WaveObject
 
 from Sound import Sound
+from source.Tags import Tags
 
 
 class SoundBuilder:
@@ -26,12 +27,30 @@ class SoundBuilder:
         return Sound(audio_seg=seg, wave_obj=wave_obj)
 
     @staticmethod
-    def reverse(sound: Sound):
-        if not sound.path and not sound.audio_seg:
-            raise ValueError("The object passed to SoundBuilder.reverse() had\n"
-                             "neither a path nor an AudioSegment, so the operation couldn't be performed.")
-        if not sound.audio_seg:
-            sound.audio_seg = SoundBuilder.get_audio_seg(sound.path)
+    def add_or_remove(tag, tags):
+        if tag in tags:
+            tags.remove(tag)
+        else:
+            tags.add(tag)
 
-        backwards_seg = sound.audio_seg.reverse()
-        return SoundBuilder.build_sound_from_audio_seg(backwards_seg)
+    @staticmethod
+    def reverse(sound: Sound):
+        if not sound.audio_seg:
+            raise ValueError("Sound has no audio segment")
+
+        reversed_seg = sound.audio_seg.reverse()
+        reversed_sound = SoundBuilder.build_sound_from_audio_seg(reversed_seg)
+        SoundBuilder.add_or_remove(Tags.REVERSED, reversed_sound.tags)
+        return reversed_sound
+
+    @staticmethod
+    def lower_frames(sound: Sound):
+        if not sound.audio_seg:
+            raise ValueError("Sound has no audio segment")
+
+        seg = sound.audio_seg
+        lowered_seg = seg.set_frame_rate(int(seg.frame_rate / 4))   # TODO: Use lowest sample rate possible
+        lowered_sound = SoundBuilder.build_sound_from_audio_seg(lowered_seg)
+        SoundBuilder.add_or_remove(Tags.FRAMES_LOWERED, lowered_sound.tags)
+        return lowered_sound
+
