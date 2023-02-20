@@ -27,11 +27,15 @@ class SoundBuilder:
         return Sound(audio_seg=seg, wave_obj=wave_obj)
 
     @staticmethod
+    def make_copy(seg: AudioSegment):
+        return AudioSegment(seg.get_array_of_samples(), frame_rate=seg.frame_rate, sample_width=seg.sample_width, channels=seg.channels)
+
+    @staticmethod
     def add_or_remove(tag, tags):
-        if tag in tags:
-            tags.remove(tag)
+        if tag.value in tags:
+            tags.remove(tag.value)
         else:
-            tags.add(tag)
+            tags.add(tag.value)
 
     @staticmethod
     def reverse(sound: Sound):
@@ -48,8 +52,7 @@ class SoundBuilder:
         if not sound.audio_seg:
             raise ValueError("Sound has no audio segment")
 
-        seg = sound.audio_seg
-        lowered_seg = seg.set_frame_rate(int(seg.frame_rate / 4))   # TODO: Use lowest sample rate possible
+        lowered_seg = SoundBuilder.make_copy(sound.audio_seg).set_frame_rate(8000)
         lowered_sound = SoundBuilder.build_sound_from_audio_seg(lowered_seg)
         SoundBuilder.add_or_remove(Tags.FRAMES_LOWERED, lowered_sound.tags)
         return lowered_sound

@@ -15,7 +15,8 @@ class Operator:
     def stop_playback_and_load_file_and_update_labels(bank, player, loaded_lbl, reversed_file_lbl):
         player.stop_if_playing()
 
-        path = filedialog.askopenfilename(initialdir=expanduser("~/Music/"), filetypes=[("MP3 files", "*.mp3")])
+        path = filedialog.askopenfilename(initialdir=expanduser("/Users/sergiojthompson/Documents/programs/sonic-surge/test_files"), filetypes=[("MP3 files", "*.mp3")])
+        # TODO: Change that directory to ~/Music/ when program is finished
         if path:  # If user didn't click cancel
             sound = SoundBuilder.build_sound_from_path(path)
             bank.clear()
@@ -28,23 +29,23 @@ class Operator:
             reversed_file_lbl.config(text="File loaded!")
 
     @staticmethod
-    def stop_playback_and_lower_frames_and_update_label(bank, player, action_lbl):
+    def stop_playback_and_alter_frames_and_update_label(bank, player, action_lbl):
         if not player.sound:
             action_lbl.config(text="No file to modify!")
             return
 
         player.stop_if_playing()
 
-        lowered_tags = set(player.sound.tags)
-        SoundBuilder.add_or_remove(Tags.FRAMES_LOWERED, lowered_tags)
-        if bank.has_sound_with_exact_tags(lowered_tags):
-            player.sound = bank.get_sound_with_exact_tags(lowered_tags)
+        altered_tags = set(player.sound.tags)
+        SoundBuilder.add_or_remove(Tags.FRAMES_LOWERED, altered_tags)
+        if bank.has_sound_with_exact_tags(altered_tags):
+            player.sound = bank.get_sound_with_exact_tags(altered_tags)
         else:
             lowered_sound = SoundBuilder.lower_frames(player.sound)
             bank.add(lowered_sound)
             player.sound = lowered_sound
 
-        action_lbl.config(text="Lowered file frames!")
+        action_lbl.config(text="Altered sample rate of file!")
 
     @staticmethod
     def stop_playback_and_reverse_file_and_update_label(bank, player, action_lbl):
