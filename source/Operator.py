@@ -29,7 +29,7 @@ class Operator:
             reversed_file_lbl.config(text="File loaded!")
 
     @staticmethod
-    def stop_playback_and_alter_frames_and_update_label(bank, player, action_lbl):
+    def stop_playback_and_alter_sample_rate_and_update_label(bank, player, action_lbl):
         if not player.sound:
             action_lbl.config(text="No file to modify!")
             return
@@ -38,10 +38,15 @@ class Operator:
 
         altered_tags = set(player.sound.tags)
         SoundBuilder.add_or_remove(Tags.FRAMES_LOWERED, altered_tags)
+
         if bank.has_sound_with_exact_tags(altered_tags):
             player.sound = bank.get_sound_with_exact_tags(altered_tags)
         else:
-            lowered_sound = SoundBuilder.lower_frames(player.sound)
+            if player.sound.audio_seg.frame_rate != 8000:
+                new_sample_rate = 8000
+            else:
+                new_sample_rate = bank.get_original_sound().audio_seg.frame_rate
+            lowered_sound = SoundBuilder.build_new_sound_with_altered_sample_rate(player.sound, new_sample_rate)
             bank.add(lowered_sound)
             player.sound = lowered_sound
 
@@ -57,14 +62,17 @@ class Operator:
 
         reversed_tags = set(player.sound.tags)
         SoundBuilder.add_or_remove(Tags.REVERSED, reversed_tags)
+
         if bank.has_sound_with_exact_tags(reversed_tags):
             player.sound = bank.get_sound_with_exact_tags(reversed_tags)
         else:
-            reversed_sound = SoundBuilder.reverse(SoundBuilder.build_sound_from_audio_seg(player.sound.audio_seg))
+            reversed_sound = SoundBuilder.build_reversed(player.sound)
             bank.add(reversed_sound)
             player.sound = reversed_sound
 
         action_lbl.config(text="Reversed file!")
+
+    # TODO: Combine the above two methods into one
 
     @staticmethod
     def stop_playback_and_update_label(player, lbl):

@@ -1,3 +1,5 @@
+import datetime
+
 class SoundPlayer:
     _instance = None
 
@@ -9,11 +11,14 @@ class SoundPlayer:
     def __init__(self):
         self.sound = None
         self.play_obj = None
+        self.time_playback_started = None
+        self.time_playback_elapsed = 0
 
     def play(self):
         self.stop_if_playing()
         if self.sound and self.sound.wave_obj:
             self.play_obj = self.sound.wave_obj.play()
+            self.time_playback_started = datetime.datetime.now()
 
     def stop_if_playing(self):
         if self.is_playing():
@@ -25,5 +30,4 @@ class SoundPlayer:
     def stop(self):
         self.play_obj.stop()
 
-    # TODO: Fix bug: 'Sound' object has no attribute 'play_obj' when you click Play
-    # TODO: Implement pausing using other library
+# TODO: Implement pausing using other library

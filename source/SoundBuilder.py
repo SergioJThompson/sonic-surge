@@ -38,22 +38,24 @@ class SoundBuilder:
             tags.add(tag.value)
 
     @staticmethod
-    def reverse(sound: Sound):
+    def build_reversed(sound: Sound):
         if not sound.audio_seg:
             raise ValueError("Sound has no audio segment")
 
         reversed_seg = sound.audio_seg.reverse()
         reversed_sound = SoundBuilder.build_sound_from_audio_seg(reversed_seg)
+        reversed_sound.tags = set(sound.tags)
         SoundBuilder.add_or_remove(Tags.REVERSED, reversed_sound.tags)
         return reversed_sound
 
     @staticmethod
-    def lower_frames(sound: Sound):
+    def build_new_sound_with_altered_sample_rate(sound: Sound, rate):
         if not sound.audio_seg:
             raise ValueError("Sound has no audio segment")
 
-        lowered_seg = SoundBuilder.make_copy(sound.audio_seg).set_frame_rate(8000)
+        lowered_seg = SoundBuilder.make_copy(sound.audio_seg).set_frame_rate(rate)
         lowered_sound = SoundBuilder.build_sound_from_audio_seg(lowered_seg)
+        lowered_sound.tags = set(sound.tags)
         SoundBuilder.add_or_remove(Tags.FRAMES_LOWERED, lowered_sound.tags)
         return lowered_sound
 

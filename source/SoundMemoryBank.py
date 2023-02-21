@@ -15,6 +15,12 @@ class SoundMemoryBank:
     def clear(self):
         self.sounds = set()
 
+    def get_original_sound(self):
+        for sound in self.sounds:
+            if not sound.tags:
+                return sound
+        raise Exception("Couldn't get original sound from SoundMemoryBank")
+
     def get_sound_with_exact_tags(self, tags: set):
         for sound in self.sounds:
             if sound.tags == tags:
