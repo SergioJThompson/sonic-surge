@@ -12,6 +12,10 @@ from Tags import Tags
 class Operator:
 
     @staticmethod
+    def pause_if_playing(player):
+        player.pause_if_playing()
+
+    @staticmethod
     def stop_playback_and_load_file_and_update_labels(bank, player, loaded_lbl, reversed_file_lbl):
         player.stop_if_playing()
 
