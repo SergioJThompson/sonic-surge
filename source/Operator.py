@@ -78,6 +78,8 @@ class Operator:
 
     # TODO: Combine the above two methods into one
 
+    # TODO: Build from original instead of working backwards from mod if sample rate lowered
+
     @staticmethod
     def stop_playback_and_update_label(player, lbl):
         if player.is_playing():
